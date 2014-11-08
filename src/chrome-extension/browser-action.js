@@ -17,9 +17,12 @@ function loadLanguages() {
   query.ascending("name");
   query.find({
     success: function (results) {
-      for (var i = 0, l = results.length; i < 0; i++) {
-        addLanguageToContext(results[i]);
-      };
+      chrome.contextMenus.removeAll(function () {
+        for (var i = 0, l = results.length; i < l; i++) {
+          addLanguageToContext(results[i]);
+        }  
+      });
+      
     },
     error: function (error) {
       console.log(error);
