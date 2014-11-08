@@ -3,11 +3,13 @@ Parse.initialize("02iUkCJOt8dlrS6AxmNlgrLh5qy35eyWiRzD9dkm", "xC6fqYNjCZEpLh4ybB
 var googleKey = 'AIzaSyAkmpI7nWTOn46YsxWV-msPYrxpPR-VhkU';
 var user = window.localStorage["user"];
 var languageActions = {};
+var loadedLanguges = [];
+var noop = function() {};
 
 var ParseLanguage = Parse.Object.extend("ParseLanguage");
 var ParseTranslation = Parse.Object.extend("ParseTranslation");
 
-function loadLanguages() {
+function loadLanguages(next) {
   if (!user) {
     return;
   }
@@ -18,14 +20,18 @@ function loadLanguages() {
   query.find({
     success: function (results) {
       chrome.contextMenus.removeAll(function () {
+        loadedLanguges = [];
         for (var i = 0, l = results.length; i < l; i++) {
           addLanguageToContext(results[i]);
-        }  
+          loadedLanguges.push(results[i].attributes);
+        }
+        next(loadLanguages);
       });
       
     },
     error: function (error) {
       console.log(error);
+      next({ success: false, error: error});
     }
   });
 }
@@ -162,7 +168,7 @@ function loginUser(email, next) {
   next({ success: true });
 }
 
-loadLanguages();
+loadLanguages(noop);
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   switch (message.action) {
@@ -174,6 +180,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       break;
     case 'removeLanguage':
       removeLanguage(message.code, sendResponse);
+      break;
+    case 'loadLanguages':
+      loadLanguages(sendResponse);
       break;
   }
 });
