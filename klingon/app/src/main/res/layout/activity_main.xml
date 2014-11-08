@@ -12,9 +12,11 @@
 
     <TextView
         android:id="@+id/source_language"
-        style="@style/Base.TextAppearance.AppCompat.Display1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:text="Idioma de origem"
+        android:layout_margin="5dp"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -25,20 +27,24 @@
         app:cardCornerRadius="4dp">
 
         <TextView
-            style="@style/Base.TextAppearance.AppCompat.Display2"
             android:id="@+id/source_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            tools:text="Lorem ipsum etc etc"
+            android:textAppearance="@android:style/TextAppearance.Small" />
 
     </android.support.v7.widget.CardView>
 
     <TextView
         android:id="@+id/translated_language"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:text="Idioma traduzido"
+        android:layout_margin="5dp"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
 
     <android.support.v7.widget.CardView
-        style="@style/Base.TextAppearance.AppCompat.Display1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -48,9 +54,11 @@
 
         <TextView
             android:id="@+id/translated_text"
-            style="@style/Base.TextAppearance.AppCompat.Display2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            tools:text="Lorem ipsum etc etc"
+            android:textAppearance="@android:style/TextAppearance.Small" />
 
     </android.support.v7.widget.CardView>
 

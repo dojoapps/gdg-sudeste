@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
             }
         });
     }
-
+    
     public int getStringResource(String stringName){
         return this.getResources().getIdentifier(stringName.toLowerCase(), "drawable", this.getPackageName());
     }
