@@ -25,7 +25,10 @@ function loadLanguages(next) {
         loadedLanguages.push(results[i].attributes);
       }
       if (next) {
-        next(loadedLanguages);
+        next({
+          success: true,
+          languages: loadedLanguages
+        });
       }
       
     },
@@ -200,4 +203,5 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     default:
       throw new Error('Ação inválida.');
   }
+  return true;
 });

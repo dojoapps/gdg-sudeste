@@ -1,9 +1,11 @@
 var user;
+
 chrome.runtime.sendMessage({
 	action: 'getUser'
 }, function (u) {
 	if (u) {
 		user = u;
+    loadLanguages();
 		toggleForms();
 	}
 });
@@ -15,13 +17,12 @@ document.querySelector('#sair').onclick = function () {
 		if (response.success) {
 			languageForm.style.display = 'none';
 			loginForm.style.display = 'block';
-		} else {
-			alert('failed to logout user');
+      document.querySelector('#activeLanguages').innerHTML = '';
 		}
 	});
 
 	return false;
-}
+};
 
 var select = document.querySelector('#language');
 
@@ -72,15 +73,24 @@ loginForm.addEventListener('submit', function (ev) {
 	}, function (response) {
 		if (response.success) {
 			toggleForms();
-      chrome.runtime.sendMessage({ action: 'loadLanguages' }, function (response) {
-        console.log(response);
-        if (response.success) {
-          document.querySelector('#activeLanguages').innerHTML = activeLanguagesTemplate(response);
-        }
-      });
+      setTimeout(function() {
+        loadLanguages();
+      }, 50);
 		}
 	});
 });
+
+function loadLanguages () {
+  languages = [{ code: 'pt-br', name: 'Portugues' }];
+  var output = '<h3>Minhas línguas:</h3><ul>';
+  for (var i=0;i<languages.length;i++) {
+    var l = languages[i];
+    output += '<li onclick="removeLanguage" data-code="' + l.code + '">' + l.name + '</li>';
+  }
+  output += '</ul>';
+
+  document.querySelector('#activeLanguages').innerHTML = output;
+}
 
 function toggleForms () {
 	languageForm.style.display = 'block';
@@ -90,6 +100,4 @@ function toggleForms () {
 function removeLanguage(ev) {
   console.log(ev);
 }
-
-var activeLanguagesTemplate = Handlebars.compile('<h3>Minhas línguas:</h3><ul>{{#each languages}}<li onclick="removeLanguage" data-code="{{code}}">{{name}}</li>{{/each}}<ul>');
 
