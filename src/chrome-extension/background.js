@@ -62,6 +62,7 @@ function handleTranslateTo(languageCode) {
       var translation = new ParseTranslation();
       translation.save({
         user: user,
+        sourceText: info.selectionText,
         translation: result.translatedText,
         targetLanguage: languageCode,
         sourceLanguage: result.detectedSourceLanguage
