@@ -34,6 +34,7 @@ public class LoginActivity extends Activity {
                     @Override
                     public void done(ParseException e) {
                         startActivity(new Intent(LoginActivity.this, ImInActivity.class));
+                        finish();
                     }
                 });
 

@@ -46,7 +46,7 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
             String sourceLanguage = Locale.forLanguageTag(json.getString("sourceLanguage")).getDisplayLanguage();
             String targetLanguage = Locale.forLanguageTag(json.getString("targetLanguage")).getDisplayLanguage();
 
-            String title = context.getString(R.string.app_name) + " "
+            String title = context.getString(R.string.app_name) + " - "
                     + sourceLanguage
                     + " to "
                     + targetLanguage;
