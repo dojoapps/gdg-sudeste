@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="//www.parsecdn.com/js/parse-1.3.1.min.js"></script>
+    <script>
+    Parse.initialize("02iUkCJOt8dlrS6AxmNlgrLh5qy35eyWiRzD9dkm", "xC6fqYNjCZEpLh4ybBrWGhzJAyPmXvGsqJGqMlVg");
+
+    function main() {
+      console.log('Mah Oi!');
+      var TestObject = Parse.Object.extend("TestObject");
+      var testObject = new TestObject();
+      testObject.save({foo: "bar"}).then(function(object) {
+        alert("yay! it worked");
+      });
+    };
+
+    function translate() {
+
+    }
+
+    chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
+      if (request.action === 'translate') {
+
+      }
+    });
+    </script>
+  </head>
+  <body onload="main()">
+  </body>
+</html>
