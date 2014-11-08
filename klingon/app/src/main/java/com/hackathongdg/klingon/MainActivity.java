@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.view.Menu;
@@ -53,7 +54,13 @@ public class MainActivity extends Activity {
         sourceLanguageTextView.setText(sourceLanguage);
         translateLanguageTextView.setText(targetLanguage);
 
-        Bitmap bitmap = ((BitmapDrawable)getResources().getDrawable(getStringResource(source))).getBitmap();
+        Drawable sourceFlag = getResources().getDrawable(getStringResource(sourceLanguage));
+        Drawable translationFlag = getResources().getDrawable(getStringResource(targetLanguage));
+
+        sourceLanguageTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(sourceFlag, null, null, null);
+        translateLanguageTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(translationFlag, null, null, null);
+
+        Bitmap bitmap = ((BitmapDrawable) translationFlag).getBitmap();
 
         Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
@@ -61,30 +68,8 @@ public class MainActivity extends Activity {
             }
         });
     }
-    
+
     public int getStringResource(String stringName){
         return this.getResources().getIdentifier(stringName.toLowerCase(), "drawable", this.getPackageName());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

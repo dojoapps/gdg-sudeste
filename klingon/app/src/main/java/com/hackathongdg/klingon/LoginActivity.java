@@ -40,6 +40,43 @@ public class LoginActivity extends Activity {
 
             }
         });
+
+        final int height = 920;
+
+        final View view1 = findViewById(R.id.view_1);
+        final View view2 = findViewById(R.id.view_2);
+        final View view3 = findViewById(R.id.view_3);
+
+        view1.post(new Runnable() {
+            @Override
+            public void run() {
+                view1.setY(view1.getY() + height);
+                view1.setAlpha(0);
+                view1.setRotation(20);
+                view2.setY(view2.getY() + height);
+                view2.setAlpha(0);
+                view2.setRotation(20);
+                view3.setY(view3.getY() + height);
+                view3.setAlpha(0);
+                view3.setRotation(20);
+
+                view1.animate().yBy(-height).alpha(1).setDuration(1000).rotation(0).start();
+                view2.animate().setStartDelay(100).yBy(-height).alpha(1).setDuration(1000).rotation(0).start();
+                view3.animate().setStartDelay(200).yBy(-height).alpha(1).setDuration(1000).rotation(0).start();
+            }
+        });
+
+//        view1.setY(view1.getHeight() - height);
+//        view1.setAlpha(0);
+//        view2.setY(view2.getHeight() - height);
+//        view2.setAlpha(0);
+//        view3.setY(view3.getHeight() - height);
+//        view3.setAlpha(0);
+//
+//        view1.animate().yBy(height).alpha(1).setDuration(250).start();
+//        view2.animate().setStartDelay(100).yBy(height).alpha(1).setDuration(250).start();
+//        view3.animate().setStartDelay(200).yBy(height).alpha(1).setDuration(250).start();
+
     }
 
 

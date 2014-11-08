@@ -67,7 +67,7 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
                             PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Action action =
-                    new NotificationCompat.Action.Builder(R.drawable.ic_launcher,
+                    new NotificationCompat.Action.Builder(R.drawable.ic_push,
                             context.getString(R.string.app_name), actionPendingIntent)
                             .build();
 

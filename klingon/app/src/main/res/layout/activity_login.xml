@@ -9,36 +9,64 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hackathongdg.klingon.LoginActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="32dp"
-        android:paddingTop="32dp"
-        android:text="" />
-
-    <com.wrapp.floatlabelededittext.FloatLabeledEditText
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-        <EditText
-            android:id="@+id/email_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Insira seu email"
-            android:inputType="textEmailAddress" />
-    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-    <Button
-        android:id="@+id/button"
+    <ImageView android:id="@+id/view_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:onClick="onRegisterClick"
-        android:text="Registrar" />
+        android:paddingBottom="32dp"
+        android:paddingTop="32dp"
+        android:src="@drawable/logo_app" />
+
+    <LinearLayout android:id="@+id/view_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Bem vindo ao Klingon" />
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="16dp"
+            android:text="Sincronize seu celular com sua conta Google e envie traduçōes do Chrome direto para o seu Android Wear" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/view_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <EditText
+                android:id="@+id/email_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Insira seu email"
+                android:inputType="textEmailAddress" />
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:onClick="onRegisterClick"
+            android:text="Registrar" />
+    </LinearLayout>
 
 
 </LinearLayout>
