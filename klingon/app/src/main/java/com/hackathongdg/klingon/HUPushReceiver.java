@@ -76,7 +76,7 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setSmallIcon(R.drawable.ic_push)
                             .setContentTitle(title)
                             .setContentText(translation)
                             .setAutoCancel(true)
