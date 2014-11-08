@@ -19,14 +19,18 @@ function loadLanguages(next) {
   query.ascending("name");
   query.find({
     success: function (results) {
-      chrome.contextMenus.removeAll(function () {
-        loadedLanguges = [];
-        for (var i = 0, l = results.length; i < l; i++) {
-          addLanguageToContext(results[i]);
-          loadedLanguges.push(results[i].attributes);
-        }
+      try {
+        chrome.contextMenus.removeAll();
+      } catch(e) { console.error(e); }
+
+      loadedLanguges = [];
+      for (var i = 0, l = results.length; i < l; i++) {
+        addLanguageToContext(results[i]);
+        loadedLanguges.push(results[i].attributes);
+      }
+      if (next) {
         next(loadLanguages);
-      });
+      }
       
     },
     error: function (error) {
@@ -178,6 +182,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       break;
     case 'loginUser':
       loginUser(message.username, sendResponse);
+      break;
+    case 'logoutUser':
+      user = null;
+      delete window.localStorage["user"];
+      sendResponse(true);
       break;
     case 'addLanguage':
       addLanguage(message.name, message.code, sendResponse);

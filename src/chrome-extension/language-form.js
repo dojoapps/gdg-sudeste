@@ -47,6 +47,12 @@ loginForm.addEventListener('submit', function (ev) {
 	}, function (response) {
 		if (response.success) {
 			toggleForms();
+      chrome.runtime.sendMessage({ action: 'loadLanguages' }, function (response) {
+        console.log(response);
+        if (response.success) {
+          document.querySelector('#activeLanguages').innerHTML = activeLanguagesTemplate(response);
+        }
+      });
 		}
 	});
 });
@@ -55,3 +61,10 @@ function toggleForms () {
 	languageForm.style.display = 'block';
 	loginForm.style.display = 'none';
 }
+
+function removeLanguage(ev) {
+  console.log(ev);
+}
+
+var activeLanguagesTemplate = Handlebars.compile('<h3>Minhas línguas:</h3><ul>{{#each languages}}<li onclick="removeLanguage" data-code="{{code}}">{{name}}</li>{{/each}}<ul>');
+

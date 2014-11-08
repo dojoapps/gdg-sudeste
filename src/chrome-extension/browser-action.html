@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="handlebars-v2.0.0.js"></script>
   </head>
   <body>
   <form id="loginForm">
@@ -8,7 +9,8 @@
   	<input type="submit" value="Entrar" />
   </form>
   <form id="languageForm" style="display: none;">
-  	<select id="language"></select>
+  	<div id="activeLanguages"></div>
+    <select id="language"></select>
   	<input type="submit" value="Enviar" />
   </form>
   <script src="languages.js"></script>
