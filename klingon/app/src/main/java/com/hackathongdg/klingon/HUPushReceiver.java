@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.provider.SyncStateContract;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,7 +32,6 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onPushReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Push received", Toast.LENGTH_SHORT).show();
 
         try {
 
@@ -40,15 +40,23 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
 
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
 
-            System.out.println(json.toString());
+            String translation = json.getString("translation");
+            String source = json.getString("sourceText");
+            String sourceLanguage = Locale.forLanguageTag(json.getString("sourceLanguage")).getDisplayLanguage();
+            String targetLanguage = Locale.forLanguageTag(json.getString("targetLanguage")).getDisplayLanguage();
 
-            String label = json.getString("translation");
             String title = context.getString(R.string.app_name) + " "
-                    + Locale.forLanguageTag(json.getString("sourceLanguage")).getDisplayLanguage()
+                    + sourceLanguage
                     + " to "
-                    + Locale.forLanguageTag(json.getString("targetLanguage")).getDisplayLanguage();
+                    + targetLanguage;
 
             Intent actionIntent = new Intent(context, MainActivity.class);
+
+            actionIntent.putExtra(MainActivity.KEY_SOURCE, source);
+            actionIntent.putExtra(MainActivity.KEY_TRANSLATE, translation);
+            actionIntent.putExtra(MainActivity.KEY_LANGUAGE_SOURCE, sourceLanguage);
+            actionIntent.putExtra(MainActivity.KEY_LANGUAGE_TRANSLATE, targetLanguage);
+
             PendingIntent actionPendingIntent =
                     PendingIntent.getActivity(context, 0, actionIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT);
@@ -58,23 +66,24 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
                             context.getString(R.string.app_name), actionPendingIntent)
                             .build();
 
+            NotificationCompat.BigTextStyle bigStyle = new NotificationCompat.BigTextStyle();
+            bigStyle.bigText(translation);
+
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setContentTitle(title)
-                            .setContentText(label)
+                            .setContentText(translation)
                             .setAutoCancel(true)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                             .setContentIntent(actionPendingIntent)
-                            .setDefaults(Notification.DEFAULT_SOUND)
-                            .extend(new NotificationCompat.WearableExtender().addAction(action));
+                            .setDefaults(NotificationCompat.DEFAULT_SOUND)
+                            .extend(new NotificationCompat.WearableExtender().addAction(action))
+                            .setStyle(bigStyle);
 
-            android.app.Notification notification = new NotificationCompat.BigTextStyle(mBuilder)
-                    .bigText(label).build();
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 
-            NotificationManager mNotificationManager =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(1, notification);
+            notificationManagerCompat.notify(1, mBuilder.build());
 
         } catch (JSONException e) {
             Log.d(TAG, "JSONException: " + e.getMessage());
