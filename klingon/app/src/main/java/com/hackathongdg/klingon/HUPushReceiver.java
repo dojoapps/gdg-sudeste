@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.SyncStateContract;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -52,10 +53,14 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
 
             Intent actionIntent = new Intent(context, MainActivity.class);
 
-            actionIntent.putExtra(MainActivity.KEY_SOURCE, source);
-            actionIntent.putExtra(MainActivity.KEY_TRANSLATE, translation);
-            actionIntent.putExtra(MainActivity.KEY_LANGUAGE_SOURCE, sourceLanguage);
-            actionIntent.putExtra(MainActivity.KEY_LANGUAGE_TRANSLATE, targetLanguage);
+            Bundle bundle = new Bundle();
+            bundle.putString(MainActivity.KEY_SOURCE, source);
+            bundle.putString(MainActivity.KEY_TRANSLATE, translation);
+            bundle.putString(MainActivity.KEY_LANGUAGE_SOURCE, sourceLanguage);
+            bundle.putString(MainActivity.KEY_LANGUAGE_TRANSLATE, targetLanguage);
+
+            actionIntent.putExtras(bundle);
+            actionIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             PendingIntent actionPendingIntent =
                     PendingIntent.getActivity(context, 0, actionIntent,
@@ -82,6 +87,9 @@ public class HUPushReceiver extends ParsePushBroadcastReceiver {
                             .setStyle(bigStyle);
 
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+
+            Notification notificationCompat = mBuilder.build();
+            notificationCompat.setLatestEventInfo(context, title, translation, actionPendingIntent);
 
             notificationManagerCompat.notify(1, mBuilder.build());
 
