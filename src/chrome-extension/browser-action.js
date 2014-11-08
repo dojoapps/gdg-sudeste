@@ -36,6 +36,7 @@ function loadLanguages() {
 function handleTranslateTo(languageCode) {
   return function (info, tab) {
     //TODO: Salvar a ParseTranslation e enviar o Push
+    
   };
 }
 
