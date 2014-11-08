@@ -1,5 +1,6 @@
 var user;
 var activeLanguages = document.querySelector('#activeLanguages');
+var loadedLanguages = {};
 
 chrome.runtime.sendMessage({
 	action: 'getUser'
@@ -27,12 +28,19 @@ document.querySelector('#sair').onclick = function () {
 
 var select = document.querySelector('#language');
 
-var options = '';
-for(lname in languages) {
-	options += '<option value="' + languages[lname] +'">' + lname + '</option>';
+function loadOptions() {
+  var options = '';
+  for(var lang in languages) {
+    var code = languages[lang];
+    if (!loadedLanguages[code]) {
+      options += '<option value="' + code +'">' + lang + '</option>';
+    }
+  }
+
+  select.innerHTML = options;  
 }
 
-select.innerHTML = options;
+loadOptions();
 
 var languageForm = document.querySelector('#languageForm');
 languageForm.addEventListener('submit', function (ev) {
@@ -75,17 +83,19 @@ loginForm.addEventListener('submit', function (ev) {
 });
 
 function loadLanguages () {
-  activeLanguages.innerHTML = '';
   chrome.runtime.sendMessage({ action: 'loadLanguages' }, function (response) {
     var languages = response.languages;
+    loadedLanguages = {};    
     var output = '<h3>Minhas linguas:</h3><ul>';
     for (var i=0;i<languages.length;i++) {
       var l = languages[i];
+      loadedLanguages[l.code] = l.name;
       output += '<li>' + l.name + ' (<a class="remover" data-code="' + l.code + '">remover</a>)</li>';
     }
     output += '</ul>';
 
     activeLanguages.innerHTML = output;
+    loadOptions();
   });
 }
 
