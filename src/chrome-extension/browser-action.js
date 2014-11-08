@@ -52,11 +52,11 @@ function handleTranslateTo(languageCode) {
       type: "basic",
       iconUrl: "icon/icon128.png",
       title: 'Wear Translator',
-      message: 'Traduzindo :' + info.selectedText
+      message: 'Traduzindo :' + info.selectionText
     }, cb);
-    googleTranslate(languageCode, info.selectedText, function (err, result) {
+    googleTranslate(languageCode, info.selectionText, function (err, result) {
       if (err) {
-        return translationError(err, id, info.selectedText);
+        return translationError(err, id, info.selectionText);
       }
 
       var translation = new ParseTranslation();
@@ -75,16 +75,16 @@ function handleTranslateTo(languageCode) {
             success: function () {
               chrome.notifications.update(id, {
                 title: 'Tradução concluída',
-                message: info.selectedText + ' foi traduzido para ' + result.get('translation')
+                message: info.selectionText + ' foi traduzido para ' + result.get('translation')
               }, cb);
             },
             error: function (err) {
-              translationError(err, id, info.selectedText);
+              translationError(err, id, info.selectionText);
             }
           });
         },
         error: function(err) {
-          translationError(err, id, info.selectedText);
+          translationError(err, id, info.selectionText);
         }
       });
     });
