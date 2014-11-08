@@ -188,5 +188,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     case 'loadLanguages':
       loadLanguages(sendResponse);
       break;
+    default:
+      throw new Error('Ação inválida.');
   }
 });
