@@ -60,9 +60,9 @@ public class LoginActivity extends Activity {
                 view3.setAlpha(0);
                 view3.setRotation(20);
 
-                view1.animate().yBy(-height).alpha(1).setDuration(1000).start();
-                view2.animate().setStartDelay(100).yBy(-height).alpha(1).setDuration(1000).start();
-                view3.animate().setStartDelay(200).yBy(-height).alpha(1).setDuration(1000).start();
+                view1.animate().yBy(-height).alpha(1).setDuration(1000).rotation(0).start();
+                view2.animate().setStartDelay(100).yBy(-height).alpha(1).setDuration(1000).rotation(0).start();
+                view3.animate().setStartDelay(200).yBy(-height).alpha(1).setDuration(1000).rotation(0).start();
             }
         });
 
