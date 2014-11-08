@@ -2,3 +2,8 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
+ul {
+  margin-left: 0;
+  padding-left: 0;
+}
