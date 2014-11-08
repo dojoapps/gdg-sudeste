@@ -7,9 +7,8 @@ for(lname in languages) {
 
 select.innerHTML = options;
 
-var form = document.querySelector('#language-form');
-
-form.addEventListener('submit', function (ev) {
+var languageForm = document.querySelector('#languageForm');
+languageForm.addEventListener('submit', function (ev) {
 	ev.preventDefault();
 
 	var selected;
@@ -17,10 +16,42 @@ form.addEventListener('submit', function (ev) {
 	for(var i in select.childNodes) {
 		var option = select.childNodes[i];
 
-		if(option.value == select.value)
+		if(option.value == select.value){
 			selected = option;
+			break;
+		}
 	}
 
- 	saveLanguage(selected.innerText, select.value);
+	chrome.runtime.sendMessage({
+		name: selected.innerText,
+		code: select.value,
+		action: 'addLanguage'
+	}, function (response) {
+		if (!response.success) {
+			alert('failed to add language');
+			return;
+		}
+
+		alert('successfully added language ' + selected.innerText)
+	});
+
 }, false);
 
+var loginForm = document.querySelector('#loginForm');
+loginForm.addEventListener('submit', function (ev) {
+	ev.preventDefault();
+
+	chrome.runtime.sendMessage({
+		username: document.querySelector('#username').value,
+		action: 'loginUser'
+	}, function (response) {
+		if (response.success) {
+			toggleForms();
+		}
+	});
+});
+
+function toggleForms () {
+	languageForm.style.display = 'block';
+	loginForm.style.display = 'none';
+}
