@@ -11,6 +11,7 @@ var ParseTranslation = Parse.Object.extend("ParseTranslation");
 
 function loadLanguages(next) {
   if (!user) {
+    next({ success: false });
     return;
   }
 
@@ -101,7 +102,7 @@ function handleTranslateTo(languageCode) {
 }
 
 function translationError(error, id, message) {
-  console.error(error);
+  console.log(error);
   chrome.notifications.update(id, {
     title: 'Erro de tradução',
     message: 'Não foi possível traduzir: ' + message
@@ -152,11 +153,16 @@ function removeLanguage(code, next) {
       query.equalTo('user', user);
       query.equalTo('code', code);
       query.find({
-        success: function (result) {
-          results[0].destroy();
+        success: function (results) {
+          if (results.length > 0) {
+            results[0].destroy();
+          }
+          next({ success: true });
+
         },
         error: function (error) {
-
+          console.log(error);
+          next({ success: false });
         }
       });
     });
@@ -172,13 +178,15 @@ function loginUser(username, next) {
 }
 
 function logoutUser (next) {
-  window.localStorage["user"] = null;
+  delete window.localStorage["user"];
   user = null;
   
   next({ success: true });
 }
 
-loadLanguages(noop);
+chrome.runtime.onInstalled.addListener(function() {
+  loadLanguages(noop);
+});
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   switch (message.action) {

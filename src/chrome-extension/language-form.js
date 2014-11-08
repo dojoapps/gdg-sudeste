@@ -1,4 +1,5 @@
 var user;
+var activeLanguages = document.querySelector('#activeLanguages');
 
 chrome.runtime.sendMessage({
 	action: 'getUser'
@@ -17,7 +18,7 @@ document.querySelector('#sair').onclick = function () {
 		if (response.success) {
 			languageForm.style.display = 'none';
 			loginForm.style.display = 'block';
-      document.querySelector('#activeLanguages').innerHTML = '';
+      activeLanguages.innerHTML = '';
 		}
 	});
 
@@ -53,12 +54,7 @@ languageForm.addEventListener('submit', function (ev) {
 		code: select.value,
 		action: 'addLanguage'
 	}, function (response) {
-		if (!response.success) {
-			alert('failed to add language');
-			return;
-		}
-
-		alert('successfully added language ' + selected.innerText)
+    loadLanguages();
 	});
 
 }, false);
@@ -73,25 +69,23 @@ loginForm.addEventListener('submit', function (ev) {
 	}, function (response) {
 		if (response.success) {
 			toggleForms();
-      setTimeout(function() {
-        loadLanguages();
-      }, 50);
+      loadLanguages();
 		}
 	});
 });
 
 function loadLanguages () {
-  document.querySelector('#activeLanguages').innerHTML = '';
+  activeLanguages.innerHTML = '';
   chrome.runtime.sendMessage({ action: 'loadLanguages' }, function (response) {
     var languages = response.languages;
     var output = '<h3>Minhas linguas:</h3><ul>';
     for (var i=0;i<languages.length;i++) {
       var l = languages[i];
-      output += '<li onclick="removeLanguage" data-code="' + l.code + '">' + l.name + '</li>';
+      output += '<li>' + l.name + ' (<a class="remover" data-code="' + l.code + '">remover</a>)</li>';
     }
     output += '</ul>';
 
-    document.querySelector('#activeLanguages').innerHTML = output;
+    activeLanguages.innerHTML = output;
   });
 }
 
@@ -100,7 +94,14 @@ function toggleForms () {
 	loginForm.style.display = 'none';
 }
 
-function removeLanguage(ev) {
-  console.log(ev);
-}
-
+activeLanguages.addEventListener('click', function (ev) {
+  if (ev.target.className === 'remover') {
+    var code = ev.target.attributes["data-code"].value;
+    chrome.runtime.sendMessage({ action: 'removeLanguage', code: code }, 
+      function(response) {
+        if (response.success) {
+          loadLanguages();
+        }
+      });
+  }
+});
