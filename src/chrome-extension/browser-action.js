@@ -17,14 +17,7 @@ function loadLanguages() {
   query.find({
     success: function (results) {
       for (var i = 0, l = results.length; i < 0; i++) {
-        var language = results[i];
-        if (!languageActions[language.code]) {
-          languageActions[language.code] = chrome.contextMenus.create({
-            title: "Traduzir para " + language.name,
-            contexts: ["all"],
-            onclick: handleTranslateTo(language.code)
-          });
-        }
+        addLanguageToContext(results[i]);
       };
     },
     error: function (error) {
@@ -33,15 +26,37 @@ function loadLanguages() {
   });
 }
 
+function addLanguageToContext(language) {
+  var code = language.get('code');
+  if (!languageActions[code]) {
+    languageActions[code] = chrome.contextMenus.create({
+      title: "Traduzir para " + language.get('name'),
+      contexts: ["all"],
+      onclick: handleTranslateTo(code)
+    });
+  }
+}
+
 function handleTranslateTo(languageCode) {
   return function (info, tab) {
     //TODO: Salvar a ParseTranslation e enviar o Push
-    
+
   };
 }
 
-chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.action === 'translate') {
+function saveLanguage(name, code) {
+  var language = new ParseLanguage();
+  language.set('name', name);
+  language.set('code', code);
+  language.set('user', user);
+  language.save(null, {
+    success: function (result) {
+      addLanguageToContext(result);
+    }
+  });
+}
 
-  }
-});
+function loginUser(email) {
+  window.localStorage["user"] = email;
+  user = email;
+}
