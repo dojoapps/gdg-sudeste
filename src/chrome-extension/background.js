@@ -169,6 +169,13 @@ function loginUser(username, next) {
   next({ success: true });
 }
 
+function logoutUser (next) {
+  window.localStorage["user"] = null;
+  user = null;
+  
+  next({ success: true });
+}
+
 loadLanguages(noop);
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
@@ -178,6 +185,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       break;
     case 'loginUser':
       loginUser(message.username, sendResponse);
+      break;
+    case 'logoutUser':
+      logoutUser(sendResponse);
       break;
     case 'addLanguage':
       addLanguage(message.name, message.code, sendResponse);
