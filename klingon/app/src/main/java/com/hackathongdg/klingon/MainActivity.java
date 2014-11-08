@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
         sourceLanguageTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(sourceFlag, null, null, null);
         translateLanguageTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(translationFlag, null, null, null);
 
-        Bitmap bitmap = ((BitmapDrawable)sourceFlag).getBitmap();
+        Bitmap bitmap = ((BitmapDrawable) translationFlag).getBitmap();
 
         Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
