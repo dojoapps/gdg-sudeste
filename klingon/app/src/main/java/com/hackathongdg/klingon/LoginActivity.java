@@ -52,13 +52,13 @@ public class LoginActivity extends Activity {
             public void run() {
                 view1.setY(view1.getY() + height);
                 view1.setAlpha(0);
-                view1.setRotation(72);
+                view1.setRotation(20);
                 view2.setY(view2.getY() + height);
                 view2.setAlpha(0);
-                view2.setRotation(72);
+                view2.setRotation(20);
                 view3.setY(view3.getY() + height);
                 view3.setAlpha(0);
-                view3.setRotation(72);
+                view3.setRotation(20);
 
                 view1.animate().yBy(-height).alpha(1).setDuration(1000).start();
                 view2.animate().setStartDelay(100).yBy(-height).alpha(1).setDuration(1000).start();

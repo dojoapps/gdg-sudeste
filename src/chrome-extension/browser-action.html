@@ -1,30 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="//www.parsecdn.com/js/parse-1.3.1.min.js"></script>
-    <script>
-    Parse.initialize("02iUkCJOt8dlrS6AxmNlgrLh5qy35eyWiRzD9dkm", "xC6fqYNjCZEpLh4ybBrWGhzJAyPmXvGsqJGqMlVg");
-
-    function main() {
-      console.log('Mah Oi!');
-      var TestObject = Parse.Object.extend("TestObject");
-      var testObject = new TestObject();
-      testObject.save({foo: "bar"}).then(function(object) {
-        alert("yay! it worked");
-      });
-    };
-
-    function translate() {
-
-    }
-
-    chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
-      if (request.action === 'translate') {
-
-      }
-    });
-    </script>
+    <link type="text/css" rel="stylesheet" href="browser-action.css">
   </head>
-  <body onload="main()">
+  <body>
+  <form id="loginForm">
+  	<input type="text" id="username" placeholder="Username" />
+  	<p><input type="submit" value="Fazer login" /></p>
+  </form>
+  <form id="languageForm" style="display: none;">
+  	<div id="activeLanguages"></div>
+    <select id="language"></select>
+    <p>
+    	<input type="submit" value="Adicionar lingua" />
+    	<a href="#" id="sair">Sair</a>
+    </p>
+  </form>
+  <script src="languages.js"></script>
+  <script src="language-form.js"></script>
   </body>
 </html>
