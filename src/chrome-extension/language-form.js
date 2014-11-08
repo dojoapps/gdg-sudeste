@@ -7,7 +7,7 @@ chrome.runtime.sendMessage({
 }, function (u) {
 	if (u) {
 		user = u;
-    loadLanguages();
+		loadLanguages();
 		toggleForms();
 	}
 });
@@ -19,7 +19,7 @@ document.querySelector('#sair').onclick = function () {
 		if (response.success) {
 			languageForm.style.display = 'none';
 			loginForm.style.display = 'block';
-      activeLanguages.innerHTML = '';
+			activeLanguages.innerHTML = '';
 		}
 	});
 
@@ -29,15 +29,15 @@ document.querySelector('#sair').onclick = function () {
 var select = document.querySelector('#language');
 
 function loadOptions() {
-  var options = '';
-  for(var lang in languages) {
-    var code = languages[lang];
-    if (!loadedLanguages[code]) {
-      options += '<option value="' + code +'">' + lang + '</option>';
-    }
-  }
+	var options = '';
+	for(var lang in languages) {
+		var code = languages[lang];
+		if (!loadedLanguages[code]) {
+			options += '<option value="' + code +'">' + lang + '</option>';
+		}
+	}
 
-  select.innerHTML = options;  
+	select.innerHTML = options;	
 }
 
 loadOptions();
@@ -62,7 +62,7 @@ languageForm.addEventListener('submit', function (ev) {
 		code: select.value,
 		action: 'addLanguage'
 	}, function (response) {
-    loadLanguages();
+		loadLanguages();
 	});
 
 }, false);
@@ -77,26 +77,29 @@ loginForm.addEventListener('submit', function (ev) {
 	}, function (response) {
 		if (response.success) {
 			toggleForms();
-      loadLanguages();
+			loadLanguages();
 		}
 	});
 });
 
 function loadLanguages () {
-  chrome.runtime.sendMessage({ action: 'loadLanguages' }, function (response) {
-    var languages = response.languages;
-    loadedLanguages = {};    
-    var output = '<h3>Minhas linguas:</h3><ul>';
-    for (var i=0;i<languages.length;i++) {
-      var l = languages[i];
-      loadedLanguages[l.code] = l.name;
-      output += '<li>' + l.name + ' (<a class="remover" data-code="' + l.code + '">remover</a>)</li>';
-    }
-    output += '</ul>';
+	showLoading();
 
-    activeLanguages.innerHTML = output;
-    loadOptions();
-  });
+	chrome.runtime.sendMessage({ action: 'loadLanguages' }, function (response) {
+		var languages = response.languages;
+		loadedLanguages = {};		
+		var output = '<h3>Minhas linguas:</h3><ul>';
+		for (var i=0;i<languages.length;i++) {
+			var l = languages[i];
+			loadedLanguages[l.code] = l.name;
+			output += '<li>' + l.name + ' (<a class="remover" data-code="' + l.code + '">remover</a>)</li>';
+		}
+		output += '</ul>';
+
+		activeLanguages.innerHTML = output;
+		loadOptions();
+		hideLoading();
+	});
 }
 
 function toggleForms () {
@@ -105,13 +108,21 @@ function toggleForms () {
 }
 
 activeLanguages.addEventListener('click', function (ev) {
-  if (ev.target.className === 'remover') {
-    var code = ev.target.attributes["data-code"].value;
-    chrome.runtime.sendMessage({ action: 'removeLanguage', code: code }, 
-      function(response) {
-        if (response.success) {
-          loadLanguages();
-        }
-      });
-  }
+	if (ev.target.className === 'remover') {
+		var code = ev.target.attributes["data-code"].value;
+		chrome.runtime.sendMessage({ action: 'removeLanguage', code: code }, 
+			function(response) {
+				if (response.success) {
+					loadLanguages();
+				}
+			});
+	}
 });
+
+function showLoading() {
+	document.querySelector('#loading').style.display = 'block';
+}
+
+function hideLoading() {
+	document.querySelector('#loading').style.display = 'none';
+}
