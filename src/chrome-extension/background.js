@@ -133,6 +133,27 @@ function addLanguage(name, code, next) {
   });
 }
 
+function removeLanguage(code, next) {
+  var langContext = languageActions[code];
+  if (langContext) {
+    chrome.contextMenus.remove(langContext, function() {
+      delete languageActions[code];
+      next({ success : true });
+      var query = new Parse.Query(ParseLanguage);
+      query.equalTo('user', user);
+      query.equalTo('code', code);
+      query.find({
+        success: function (result) {
+          results[0].destroy();
+        },
+        error: function (error) {
+
+        }
+      });
+    });
+  }
+}
+
 function loginUser(email, next) {
   window.localStorage["user"] = email;
   user = email;
@@ -150,6 +171,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       break;
     case 'addLanguage':
       addLanguage(message.name, message.code, sendResponse);
+      break;
+    case 'removeLanguage':
+      removeLanguage(message.code, sendResponse);
       break;
   }
 });
