@@ -3,7 +3,7 @@ Parse.initialize("02iUkCJOt8dlrS6AxmNlgrLh5qy35eyWiRzD9dkm", "xC6fqYNjCZEpLh4ybB
 var googleKey = 'AIzaSyAkmpI7nWTOn46YsxWV-msPYrxpPR-VhkU';
 var user = window.localStorage["user"];
 var languageActions = {};
-var loadedLanguges = [];
+var loadedLanguages = [];
 var noop = function() {};
 
 var ParseLanguage = Parse.Object.extend("ParseLanguage");
@@ -19,17 +19,13 @@ function loadLanguages(next) {
   query.ascending("name");
   query.find({
     success: function (results) {
-      try {
-        chrome.contextMenus.removeAll();
-      } catch(e) { console.error(e); }
-
-      loadedLanguges = [];
+      loadedLanguages = [];
       for (var i = 0, l = results.length; i < l; i++) {
         addLanguageToContext(results[i]);
-        loadedLanguges.push(results[i].attributes);
+        loadedLanguages.push(results[i].attributes);
       }
       if (next) {
-        next(loadLanguages);
+        next(loadedLanguages);
       }
       
     },
@@ -168,7 +164,6 @@ function loginUser(username, next) {
   username = username.replace(/[^\w]/ig, '');
   window.localStorage["user"] = username;
   user = username;
-  loadLanguages();
 
   next({ success: true });
 }
