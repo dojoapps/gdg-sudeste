@@ -41,9 +41,24 @@ function addLanguageToContext(language) {
   }
 }
 
+function cb() {
+  console.log(arguments);
+}
+
 function handleTranslateTo(languageCode) {
   return function (info, tab) {
+    var id = 't_' + new Date().valueOf();
+    chrome.notifications.create(id, {
+      type: "basic",
+      iconUrl: "icon/icon128.png",
+      title: 'Wear Translator',
+      message: 'Traduzindo :' + info.selectedText
+    }, cb);
     googleTranslate(languageCode, info.selectedText, function (err, result) {
+      if (err) {
+        return translationError(err, id, info.selectedText);
+      }
+
       var translation = new ParseTranslation();
       translation.set('user',user);
       translation.save({
@@ -57,20 +72,31 @@ function handleTranslateTo(languageCode) {
             channels: [user],
             data: result
           }, {
-            success: function (result) {
-              console.log('Notificação enviada.');
+            success: function () {
+              chrome.notifications.update(id, {
+                title: 'Tradução concluída',
+                message: info.selectedText + ' foi traduzido para ' + result.get('translation')
+              }, cb);
             },
             error: function (err) {
-              console.error(err);
+              translationError(err, id, info.selectedText);
             }
           });
         },
         error: function(err) {
-          console.log(err);
+          translationError(err, id, info.selectedText);
         }
       });
     });
   };
+}
+
+function translationError(error, id, message) {
+  console.error(error);
+  chrome.notifications.update(id, {
+    title: 'Erro de tradução',
+    message: 'Não foi possível traduzir: ' + message
+  }, cb);
 }
 
 function googleTranslate(languageCode, text, next) {
