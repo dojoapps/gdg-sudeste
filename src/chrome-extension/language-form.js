@@ -81,15 +81,18 @@ loginForm.addEventListener('submit', function (ev) {
 });
 
 function loadLanguages () {
-  languages = [{ code: 'pt-br', name: 'Portugues' }];
-  var output = '<h3>Minhas línguas:</h3><ul>';
-  for (var i=0;i<languages.length;i++) {
-    var l = languages[i];
-    output += '<li onclick="removeLanguage" data-code="' + l.code + '">' + l.name + '</li>';
-  }
-  output += '</ul>';
+  document.querySelector('#activeLanguages').innerHTML = '';
+  chrome.runtime.sendMessage({ action: 'loadLanguages' }, function (response) {
+    var languages = response.languages;
+    var output = '<h3>Minhas linguas:</h3><ul>';
+    for (var i=0;i<languages.length;i++) {
+      var l = languages[i];
+      output += '<li onclick="removeLanguage" data-code="' + l.code + '">' + l.name + '</li>';
+    }
+    output += '</ul>';
 
-  document.querySelector('#activeLanguages').innerHTML = output;
+    document.querySelector('#activeLanguages').innerHTML = output;
+  });
 }
 
 function toggleForms () {
