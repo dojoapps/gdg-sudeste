@@ -5,14 +5,22 @@
   "description": "Extensão para enviar tradução do chrome para o Android Wear.",
   "homepage_url": "https://github.com/dojoapps/gdg-sudeste",
   "icons": {
+    "48": "icon/icon48.png",
+    "32": "icon/icon32.png",
     "128": "icon/icon128.png"
   },
   "permissions": [
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "storage",
+    "notifications"
   ],
+  "background": {
+    "scripts": ["languages.js","parse.js","background.js"],
+    "persistent": true
+  },
   "browser_action": {
-    "default_icon": "icon/icon128.png",
+    "default_icon": "icon/icon19.png",
     "default_title": "Save Translator",
     "default_popup": "browser-action.html"
   }
