@@ -1,3 +1,28 @@
+var user;
+chrome.runtime.sendMessage({
+	action: 'getUser'
+}, function (u) {
+	if (u) {
+		user = u;
+		toggleForms();
+	}
+});
+
+document.querySelector('#sair').onclick = function () {
+	chrome.runtime.sendMessage({
+		action: 'logoutUser'
+	}, function (response) {
+		if (response.success) {
+			languageForm.style.display = 'none';
+			loginForm.style.display = 'block';
+		} else {
+			alert('failed to logout user');
+		}
+	});
+
+	return false;
+}
+
 var select = document.querySelector('#language');
 
 var options = '';
