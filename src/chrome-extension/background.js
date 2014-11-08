@@ -148,7 +148,6 @@ function removeLanguage(code, next) {
   if (langContext) {
     chrome.contextMenus.remove(langContext, function() {
       delete languageActions[code];
-      next({ success : true });
       var query = new Parse.Query(ParseLanguage);
       query.equalTo('user', user);
       query.equalTo('code', code);
