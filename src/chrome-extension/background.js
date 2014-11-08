@@ -119,7 +119,7 @@ function googleTranslate(languageCode, text, next) {
   req.send();
 }
 
-function saveLanguage(name, code) {
+function addLanguage(name, code, next) {
   var language = new ParseLanguage();
   language.set('name', name);
   language.set('code', code);
@@ -127,14 +127,28 @@ function saveLanguage(name, code) {
   language.save(null, {
     success: function (result) {
       addLanguageToContext(result);
+      next({ success: true });
     }
   });
 }
 
-function loginUser(email) {
+function loginUser(email, next) {
   window.localStorage["user"] = email;
   user = email;
   loadLanguages();
+
+  next({ success: true });
 }
 
 loadLanguages();
+
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  switch (message.action) {
+    case 'login':
+      loginUser(message.email, sendResponse);
+      break;
+    case 'addLanguage':
+      addLanguage(message.name, message.code, sendResponse);
+      break;
+  }
+});
