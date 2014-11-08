@@ -160,9 +160,10 @@ function removeLanguage(code, next) {
   }
 }
 
-function loginUser(email, next) {
-  window.localStorage["user"] = email;
-  user = email;
+function loginUser(username, next) {
+  username = username.replace(/[^\w]/ig, '');
+  window.localStorage["user"] = username;
+  user = username;
   loadLanguages();
 
   next({ success: true });
@@ -173,7 +174,7 @@ loadLanguages(noop);
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   switch (message.action) {
     case 'login':
-      loginUser(message.email, sendResponse);
+      loginUser(message.username, sendResponse);
       break;
     case 'addLanguage':
       addLanguage(message.name, message.code, sendResponse);
