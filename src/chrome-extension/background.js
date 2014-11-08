@@ -41,7 +41,7 @@ function addLanguageToContext(language) {
   if (!languageActions[code]) {
     languageActions[code] = chrome.contextMenus.create({
       title: "Traduzir para " + language.get('name'),
-      contexts: ["all"],
+      contexts: ["selection"],
       onclick: handleTranslateTo(code)
     });
   }
@@ -58,7 +58,7 @@ function handleTranslateTo(languageCode) {
       type: "basic",
       iconUrl: "icon/icon128.png",
       title: 'Wear Translator',
-      message: 'Traduzindo :' + info.selectionText
+      message: 'Traduzindo: ' + info.selectionText
     }, cb);
     googleTranslate(languageCode, info.selectionText, function (err, result) {
       if (err) {
@@ -81,7 +81,7 @@ function handleTranslateTo(languageCode) {
             success: function () {
               chrome.notifications.update(id, {
                 title: 'Tradução concluída',
-                message: info.selectionText + ' foi traduzido para ' + result.get('translation')
+                message: 'Texto traduzido: ' + result.get('translation')
               }, cb);
             },
             error: function (err) {
@@ -173,7 +173,10 @@ loadLanguages(noop);
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   switch (message.action) {
-    case 'login':
+    case 'getUser':
+      sendResponse(user);
+      break;
+    case 'loginUser':
       loginUser(message.username, sendResponse);
       break;
     case 'addLanguage':
